@@ -1,15 +1,18 @@
-JP REST API CACHE
+WP REST API Cache (based on [JP REST API CACHE](https://github.com/Shelob9/jp-rest-cache))
 =====================
 
-Soft-expiring, server-side cache  for the WordPress REST API (WP REST).
+Soft-expiring, server-side cache for the WordPress REST API (WP REST).
 
-Utilizes [Mark Jaquith's WP-TLC-Transients Library](https://github.com/markjaquith/WP-TLC-Transients). Requires WordPress and the [WordPress REST API](http://wp-api.org).
+Utilises the [WP-TLC-Transients](https://github.com/markjaquith/WP-TLC-Transients) library. Requires WordPress and the [WordPress REST API v2](http://v2.wp-api.org).
 
-Keep in mind two things when using please:
-1) Caching does not categorically equal faster. Do some science, test on your testing server, not your live server for the love of Gaia, to figure out if this actually improves performance.
-2) You're probably better off using a persistent object cache on your site. Again, do science, figure out what works best. My feelings will not be hurt if you use something else instead.
+Essentially implements JP REST API CACHE and WP-TLC-Transients as a WordPress plugin not requiring any other PHP dependencies (namely composer).
 
-BTW By "do science" I mean do a set of repeatable tests with a one independent variable (cache method) and keep everything else the same. Compare results and see if you're hypothesis (cache method == faster) evaluates true or false.
+The plugin attaches to the `rest_pre_dispatch` filter in the WP REST API and includes two filters of its own:
+- `wp_rest_cache_skip_cache` can be used to filter whether a given endpoint/method should skip the cache or not (defaults to false).
+- `wp_rest_cache_cache_time` can be used to change the caching timeout for the plugin (defaults to 360).
+
+Most of the work in this was done by either [Josh Pollock](https://github.com/Shelob9) or [Mark Jaquith](http://markjaquith.com), I just put it together and tweaked it a bit.
 
 ### License
-Copyright 2014 Josh Pollock. Licensed under the terms of the GNU General public license version 2. Please share with your neighbor.
+Copyright for portions of WP REST API Cache are held by Josh Pollock, 2014 as part of JP REST API CACHE, and Mark Jaquith, 2013 as part of WP TLC Transients. All other copyright for WP REST API Cache are held by Jeremy Tweddle, 2016.
+WP REST API Cache is licensed under the GPL, version 2.0 or any later version. See license.txt
