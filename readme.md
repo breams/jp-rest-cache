@@ -11,11 +11,5 @@ Keep in mind two things when using please:
 
 BTW By "do science" I mean do a set of repeatable tests with a one independent variable (cache method) and keep everything else the same. Compare results and see if you're hypothesis (cache method == faster) evaluates true or false.
 
-### Installation
-This is not a plugin. It's a composer library. Putting this in your plugin directory and then opening an issue when this doesn't show up in your plugin admin is a violation of intergalactic law.
-
-Add `"shelob9/jp-rest-cache": "dev-master"` to your site/plugin/theme's composer.json. 
-
-
 ### License
 Copyright 2014 Josh Pollock. Licensed under the terms of the GNU General public license version 2. Please share with your neighbor.
