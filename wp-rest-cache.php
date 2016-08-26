@@ -3,7 +3,7 @@
  * Plugin Name: WP REST Cache
  * Description: This plugin enables transient based caching for WP-API v2 utilising the WP-TLC-Transients library
  * Plugin URI: https://github.com/breams/wp-rest-cache/
- * Version: 0.1.1
+ * Version: 0.1.2
  * Author: <a href="https://github.com/Shelob9/">Josh Pollock</a>, <a href="http://markjaquith.com">Mark Jaquith</a>, Jeremy Tweddle
  */
 
@@ -78,13 +78,13 @@ if ( ! function_exists( 'wp_rest_cache_get' ) ) :
 		$skip_cache = apply_filters( 'wp_rest_cache_skip_cache', false, $endpoint, $method );
 		if ( $skip_cache )  {
 			$server->send_header( 'X-WP-API-Cache', 'skipped' );
-			error_log( 'skipped' );
+			wp_rest_cache_debug_log( 'WP-REST-Cache: skipped cache for endpoint ' . $endpoint . ' using method ' . $method );
 			return $result;
 		}
 
 		if ( $request->get_param('refresh-cache') === true ){
 			$server->send_header( 'X-WP-API-Cache', 'refreshed' );
-			error_log( 'refreshed' );
+			wp_rest_cache_debug_log( 'WP-REST-Cache: refreshed cache for endpoint ' . $endpoint . ' using method ' . $method );
 			return $result;
 		}
 
@@ -109,7 +109,7 @@ if ( ! function_exists( 'wp_rest_cache_get' ) ) :
 			->get();
 
 		$result->header( 'X-WP-API-Cache', 'cached', false );
-		error_log( 'cached' );
+		wp_rest_cache_debug_log( 'WP-REST-Cache: cache hit for endpoint ' . $endpoint . ' using method ' . $method );
 
 		return $result;
 	}
@@ -134,6 +134,35 @@ if ( ! function_exists( 'wp_rest_cache_rebuild' ) ) :
 		$request->set_param('refresh-cache', true);
 		return $server->dispatch($request);
 
+	}
+
+endif;
+
+
+if ( ! function_exists( 'wp_rest_cache_debug_log' ) ) :
+	/**
+	 * Log value to debug.log if debugging is turned on.
+	 *
+	 * @since 0.1.2
+	 *
+	 * @param mixed $log
+	 */
+
+	function wp_rest_cache_debug_log( $log ) {
+		if ( defined('WP_DEBUG')
+			&& true === WP_DEBUG
+			&& defined('WP_DEBUG_LOG')
+			&& true === WP_DEBUG_LOG ) {
+
+			if ( is_array( $log ) || is_object( $log ) ) {
+				error_log( print_r( $log, true ) );
+			} elseif ( is_bool( $log ) ) {
+				error_log( print_r( $log ? "$log (true)" : "$log (false)", true ) );
+			} else {
+				error_log( $log );
+			}
+
+		}
 	}
 
 endif;
